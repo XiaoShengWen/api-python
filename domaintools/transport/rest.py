@@ -1,4 +1,5 @@
 import urllib2
+import httplib
 from urlparse import urlparse
 
 """
