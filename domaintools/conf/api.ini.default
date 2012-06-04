@@ -12,4 +12,5 @@ secure_auth    = true
 return_type    = json
 transport_type = curl
 content_type   = application/json
-proxy          = None
+proxy          = None 
+# proxy example: http://proxy.example.com:1234
