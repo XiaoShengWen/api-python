@@ -48,9 +48,12 @@ class Request(object):
 
         #The raw response sent by domaintoolsAPI
         self.raw_response            = None
+        
+        #The proxy url
+        self.proxy                   = None
 
         self.configuration           = Configuration() if(configuration == None) else configuration
-
+        
 
     def service(self, service_name=''):
         """Specifies the name of the service to call"""
@@ -65,7 +68,7 @@ class Request(object):
 
     def domain(self, domain_name=''):
         """Set the domain name to use for the API request"""
-
+        
         self.domain_name = domain_name
         return self
 
@@ -188,9 +191,9 @@ class Request(object):
         """
         transport = self.configuration.transport
         response  = ''
-
+        
         try:
-            response = transport.get(self.url)
+            response = transport.get(self.url,self.configuration.proxy)
         except Exception as e:
             raise ServiceUnavailableException()
 

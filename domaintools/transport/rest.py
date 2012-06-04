@@ -1,4 +1,4 @@
-import httplib
+import urllib2
 from urlparse import urlparse
 
 """
@@ -15,19 +15,29 @@ class RestService(object):
         self.content_type = content_type
         self.status_code  = 200
 
-    def get(self, url):
+    def get(self, url, proxy=None):
 
-        parts = urlparse(url)
+        
+        if proxy == None :
+            parts = urlparse(url)
 
-        connection = httplib.HTTPConnection(parts.netloc)
+            connection = httplib.HTTPConnection(parts.netloc)
 
-        connection.request('GET',parts.path+'?'+parts.query)
+            connection.request('GET',parts.path+'?'+parts.query)
 
-        response = connection.getresponse()
+            response = connection.getresponse()
 
-        self.status_code = response.status
+            self.status_code = response.status
+        else:
+            proxy = urllib2.ProxyHandler({'http': proxy})
+            opener = urllib2.build_opener(proxy)
+            urllib2.install_opener(opener)
+            response = urllib2.urlopen(url)
+            self.status_code = response.code
+		
+        
         return response.read()
-
+        
 
     def get_status(self):
         return self.status_code
