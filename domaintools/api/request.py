@@ -193,12 +193,12 @@ class Request(object):
         response  = ''
         
         try:
-            response = transport.get(self.url,self.configuration.proxy)
+			response = transport.get(self.url,self.configuration.proxy)
         except Exception as e:
             raise ServiceUnavailableException()
-
+            
         status = transport.get_status()
-
+        
         if status==200:
             return response
         elif status==400:
