@@ -1,7 +1,5 @@
 import urllib2
 from urllib2 import Request, urlopen, URLError, HTTPError
-import httplib
-from urlparse import urlparse
 
 """
 This file is part of the domaintoolsAPI_python_wrapper package.
