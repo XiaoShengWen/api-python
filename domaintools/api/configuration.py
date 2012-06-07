@@ -121,7 +121,10 @@ class Configuration(object):
         self.return_type 		       = config['return_type'];
         self.content_type			   = config['content_type'];
         self.transport_type            = config['transport_type'];
-        self.proxy                     = config['proxy'];
+
+        if not config['proxy'] == '':
+          self.proxy                     = config['proxy']
+
         self.base_url				   = 'http://' + self.host +':' + self.port + '/' + self.sub_url;
 
         self.transport                 = self.transport_map[config['transport_type']](self.content_type)
