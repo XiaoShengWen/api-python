@@ -193,7 +193,7 @@ class Request(object):
         response  = ''
         
         try:
-			response = transport.get(self.url,self.configuration.proxy)
+            response = transport.get(self.url, self.configuration.proxy)
         except Exception as e:
             raise ServiceUnavailableException()
             
