@@ -46,6 +46,9 @@ class Configuration(object):
 
         #transport object in charge of calling API
         self.transport           = None
+        
+        #proxy url
+        self.proxy               = None
 
         #default configuration file path
         self.default_config_path = os.path.realpath(os.path.dirname(__file__)+'/../conf/api.ini')
@@ -61,7 +64,8 @@ class Configuration(object):
             'secure_auth'    : 1,
             'return_type'    : 'json',
             'transport_type' : 'curl',
-            'content_type'   : 'application/json'
+            'content_type'   : 'application/json',
+            'proxy'          : None
         }
 
         #dictionary to map the good transport class
@@ -70,14 +74,14 @@ class Configuration(object):
         }
 
         if(ini_resource == None): ini_resource = self.default_config_path
-
+        
         config = {}
 
         if(type(ini_resource) is dict):
             config = ini_resource
         else:
             config = utils.load_config_file(ini_resource)
-
+        
         self.init(config)
 
     def validateParams(self, config):
@@ -117,6 +121,9 @@ class Configuration(object):
         self.return_type 		       = config['return_type'];
         self.content_type			   = config['content_type'];
         self.transport_type            = config['transport_type'];
+
+        if not config['proxy'] == '':
+          self.proxy                     = config['proxy']
 
         self.base_url				   = 'http://' + self.host +':' + self.port + '/' + self.sub_url;
 

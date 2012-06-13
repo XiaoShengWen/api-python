@@ -1,5 +1,5 @@
-import httplib
-from urlparse import urlparse
+import urllib2
+from urllib2 import Request, urlopen, URLError, HTTPError
 
 """
 This file is part of the domaintoolsAPI_python_wrapper package.
@@ -15,19 +15,26 @@ class RestService(object):
         self.content_type = content_type
         self.status_code  = 200
 
-    def get(self, url):
+    def get(self, url, proxy=None):
+        if proxy:
+            proxy = urllib2.ProxyHandler({'http': proxy})
+            opener = urllib2.build_opener(proxy)
+            urllib2.install_opener(opener)
 
-        parts = urlparse(url)
-
-        connection = httplib.HTTPConnection(parts.netloc)
-
-        connection.request('GET',parts.path+'?'+parts.query)
-
-        response = connection.getresponse()
-
-        self.status_code = response.status
-        return response.read()
-
+        try:
+            response = urllib2.urlopen(url)
+        except HTTPError, e:
+            resp = e.read()
+            self.status_code = e.code
+        except URLError, e:
+            resp = e.read()
+            self.status_code = e.code
+        else:
+            self.status_code = response.code
+            resp = response.read()
+          
+        return resp
+        
 
     def get_status(self):
         return self.status_code
