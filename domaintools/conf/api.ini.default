@@ -4,6 +4,9 @@
 username       = your_api_username
 key            = your_api_key
 
+# Specify wheter you want to use DomainTools free api
+use_free_api   = false
+
 # NO NEED TO EDIT BELOW
 host           = api.domaintools.com
 port           = 80
