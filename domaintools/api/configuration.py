@@ -17,6 +17,9 @@ class Configuration(object):
         Initiliaze it with default values (if no config given)
         """
 
+        #use DomainTools free API
+        self.use_free_api        = False
+        
         #server host
         self.host                = None
 
@@ -58,10 +61,11 @@ class Configuration(object):
 
             'username'       : '',
             'key'            : '',
+            'use_free_api'   : False,
             'host'           : 'api.domaintools.com',
-            'version'        :'v1',
-            'port'           :'80',
-            'secure_auth'    : 1,
+            'version'        : 'v1',
+            'port'           : '80',
+            'secure_auth'    : True,
             'return_type'    : 'json',
             'transport_type' : 'curl',
             'content_type'   : 'application/json',
@@ -110,22 +114,19 @@ class Configuration(object):
         Initialize the configuration Object
         Returns the configuration dictionary
         """
-        config                         = self.validateParams(config);
+        config              = self.validateParams(config);
 
-        self.host 	                   = config['host'];
-        self.port					   = config['port'];
-        self.sub_url				   = config['version'];
-        self.username				   = config['username'];
-        self.password				   = config['key'];
-        self.secure_auth               = True if config['secure_auth'] in ('True','true','1') else False;
-        self.return_type 		       = config['return_type'];
-        self.content_type			   = config['content_type'];
-        self.transport_type            = config['transport_type'];
+        self.use_free_api   = True if config['use_free_api'] in ('True','true',1) else False
+        self.host           = ('free' if self.use_free_api==True else '')+config['host'];
+        self.port           = config['port'];
+        self.sub_url        = config['version'];
+        self.username       = config['username'];
+        self.password       = config['key'];
+        self.secure_auth    = True if config['secure_auth'] in ('True','true','1') else False;
+        self.return_type    = config['return_type'];
+        self.content_type   = config['content_type'];
+        self.transport_type = config['transport_type'];
 
-        if not config['proxy'] == '':
-          self.proxy                     = config['proxy']
+        self.base_url       = 'http://' + self.host +':' + self.port + '/' + self.sub_url;
 
-        self.base_url				   = 'http://' + self.host +':' + self.port + '/' + self.sub_url;
-
-        self.transport                 = self.transport_map[config['transport_type']](self.content_type)
-
+        self.transport      = self.transport_map[config['transport_type']](self.content_type)
